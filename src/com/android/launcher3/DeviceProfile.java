@@ -29,7 +29,9 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.os.SystemProperties;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Surface;
 
 import com.android.launcher3.CellLayout.ContainerType;
@@ -241,7 +243,14 @@ public class DeviceProfile {
         availableHeightPx = windowBounds.availableSize.y;
 
         mInfo = info;
-        isTablet = info.isTablet(windowBounds);
+        //full screen
+        if (SystemProperties.getBoolean("persist.fullscreen.enable", false)) {
+            Log.w("DeviceProfile", "DeviceProfile: set isTablet to false");
+            isTablet = false;
+        }
+        else {
+            isTablet = info.isTablet(windowBounds);
+        }
         isPhone = !isTablet;
         isTwoPanels = isTablet && useTwoPanels;
 
